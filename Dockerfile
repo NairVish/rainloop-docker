@@ -39,7 +39,7 @@ RUN set -ex; \
     mkdir -p /var/lib/php/session; \
     chown -R root:www-data /var/lib/php/session; \
     apt-get update; \
-    apt install -y --no-install-recommends postgresql libpq_dev; \
+    apt install -y --no-install-recommends postgresql libpq-dev; \
     docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql;
 
 ## Install Rainloop ##
