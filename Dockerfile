@@ -38,7 +38,7 @@ RUN set -ex; \
     chown www-data:www-data "${APACHE_LOG_DIR}/php_scripts_error.log"; \
     mkdir -p /var/lib/php/session; \
     chown -R root:www-data /var/lib/php/session; \
-    apt install -y --no-install-recommends libpq-dev; \
+    apt install -y --no-install-recommends postgresql; \
     docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql;
 
 ## Install Rainloop ##
