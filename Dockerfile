@@ -24,7 +24,7 @@ RUN { \
         echo 'max_execution_time=30'; \
         echo 'max_input_time=30'; \
         echo 'memory_limit=40M'; \
-        echo 'disable_functions=exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source'; \
+        echo 'disable_functions=show_source,system,shell_exec,passthru,exec,phpinfo,popen,proc_open,allow_url_fopen'; \
         echo 'cgi.force_redirect=On'; \
         echo "open_basedir=${RAINLOOP_HOME}"; \
         echo 'session.save_path=/var/lib/php/session'; \
