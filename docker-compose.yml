@@ -5,7 +5,7 @@ services:
     restart: always
     depends_on:
       - database
-    image: deltacore/rainloop
+    image: nairvish/rainloop-docker
     volumes:
       - /home/nair/rainloop_data/data:/var/www/rainloop/data
     ports:
