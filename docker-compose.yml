@@ -7,7 +7,7 @@ services:
       - database
     image: nairvish/rainloop-docker
     volumes:
-      - /home/nair/rainloop_data/data:/var/www/rainloop/data
+      - data:/var/www/rainloop/data
     ports:
       - 8093:80
 
@@ -16,7 +16,7 @@ services:
     restart: always
     image: mariadb
     volumes:
-      - /home/nair/rainloop_data/db:/var/lib/mysql
+      - db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: rainloop
