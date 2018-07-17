@@ -1,0 +1,24 @@
+version: '2'
+services:
+  rainloop:
+    container_name: "rainloop_base"
+    restart: always
+    depends_on:
+      - database
+    image: deltacore/rainloop
+    volumes:
+      - /home/nair/rainloop_data/data:/var/www/rainloop/data
+    ports:
+      - 8093:80
+
+  database:
+    container_name: "rainloop_mariadb"
+    restart: always
+    image: mariadb
+    volumes:
+      - /home/nair/rainloop_data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: rainloop
+      MYSQL_USER: rainloop
+      MYSQL_PASSWORD: rainloop
