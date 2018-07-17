@@ -1,14 +1,16 @@
 FROM php:7.2.7-apache-stretch
 
-ENV RAINLOOP_VERSION 1.12.0
+ENV RAINLOOP_VERSION="1.12.0"
 ENV RAINLOOP_ZIP_URL="https://github.com/RainLoop/rainloop-webmail/releases/download/v${RAINLOOP_VERSION}/rainloop-${RAINLOOP_VERSION}.zip"
 ENV RAINLOOP_ZIP_NAME="rainloop-${RAINLOOP_VERSION}.zip"
 ENV APACHE_CONFDIR="/etc/apache2"
 ENV APACHE_LOG_DIR="/var/log/apache2"
 ENV RAINLOOP_HOME="/var/www/rainloop/"
 
-# Setup and harden PHP
+## Setup and harden PHP ##
 # See: https://www.cyberciti.biz/tips/php-security-best-practices-tutorial.html
+
+# Echo desired options into custom ini file.
 RUN { \
         echo 'expose_php=Off'; \
         echo 'display_errors=Off'; \
@@ -22,13 +24,14 @@ RUN { \
         echo 'max_execution_time=30'; \
         echo 'max_input_time=30'; \
         echo 'memory_limit=40M'; \
-        echo 'disable_functions =exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source'; \
+        echo 'disable_functions=exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source'; \
         echo 'cgi.force_redirect=On'; \
         echo "open_basedir=${RAINLOOP_HOME}"; \
         echo 'session.save_path=/var/lib/php/session'; \
         echo 'upload_tmp_dir=/var/lib/php/session'; \
     } > /usr/local/etc/php/conf.d/custom.ini;
 
+# Create folders mentioned in echoed options.
 RUN set -ex; \
     \
     touch "${APACHE_LOG_DIR}/php_scripts_error.log"; \
@@ -37,11 +40,13 @@ RUN set -ex; \
     chown -R root:www-data /var/lib/php/session; \
     docker-php-ext-install pdo pdo_mysql pdo_pgsql;
 
-# Download and unzip Rainloop
+## Install Rainloop ##
+# Install wget and unzip because they are needed next.
 RUN set -ex; \
     apt-get update; \
     apt-get install -y --no-install-recommends wget unzip;
 
+# Unzip and install Rainloop in RAINLOOP_HOME
 RUN set -ex; \
     \
     cd /var/www; \
@@ -49,18 +54,23 @@ RUN set -ex; \
     unzip ${RAINLOOP_ZIP_NAME} -d ${RAINLOOP_HOME}; \
     chown -R www-data:www-data /var/www;
 
-# Set Apache config and hardened conf
+## Modify Apache config ##
+
+# Replace default vhost config
 RUN rm ${APACHE_CONFDIR}/sites-available/000-default.conf
 COPY ./000-default.conf ${APACHE_CONFDIR}/sites-available
 
+# Replace default apache2 config with hardened version and activate appropriate module(s)
 RUN a2enmod headers
 RUN rm ${APACHE_CONFDIR}/apache2.conf
 COPY ./apache2.conf ${APACHE_CONFDIR}
 
-# Copy entrypoint script onto filesystem
+## Finalize ##
+
+# Copy entrypoint script onto filesystem and make executable
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-# Finalize
+# Set entrypoint and command
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
