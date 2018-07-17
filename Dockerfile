@@ -2,7 +2,7 @@ FROM php:7.2.7-apache-stretch
 
 ENV RAINLOOP_VERSION="1.12.0"
 ENV RAINLOOP_ZIP_URL="https://github.com/RainLoop/rainloop-webmail/releases/download/v${RAINLOOP_VERSION}/rainloop-community-${RAINLOOP_VERSION}.zip"
-ENV RAINLOOP_ZIP_NAME="rainloop-${RAINLOOP_VERSION}.zip"
+ENV RAINLOOP_ZIP_NAME="rainloop-community-${RAINLOOP_VERSION}.zip"
 ENV APACHE_CONFDIR="/etc/apache2"
 ENV APACHE_LOG_DIR="/var/log/apache2"
 ENV RAINLOOP_HOME="/var/www/rainloop/"
