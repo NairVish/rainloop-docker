@@ -26,7 +26,6 @@ RUN { \
         echo 'memory_limit=40M'; \
         echo 'disable_functions=show_source,system,shell_exec,passthru,exec,phpinfo,popen,proc_open,allow_url_fopen'; \
         echo 'cgi.force_redirect=On'; \
-        echo "open_basedir=${RAINLOOP_HOME}"; \
         echo 'session.save_path=/var/lib/php/session'; \
         echo 'upload_tmp_dir=/var/lib/php/session'; \
     } > /usr/local/etc/php/conf.d/custom.ini;
